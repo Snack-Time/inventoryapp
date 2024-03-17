@@ -15,5 +15,7 @@ const VideoGameSchema = new Schema({
 })
 
 VideoGameSchema.virtual("url").get(function () {
-    return `/catalog/video-game/${this._id}`;
+    return `/catalog/videogame/${this._id}`;
 });
+
+module.exports = mongoose.model("Video Game", VideoGameSchema)
