@@ -4,11 +4,10 @@ const Schema = mongoose.Schema;
 
 const GenreSchema = new Schema({
     name: { type: String, required: true, maxLength: 100},
-    desc: { type: String, required: true},
 })
 
-VideoGameSchema.virtual("url").get(function () {
+GenreSchema.virtual("url").get(function () {
     return `/catalog/genre/${this._id}`;
 });
 
-module.exports = mongoose.model("Genre", GenreSchema)
+module.exports = mongoose.model("Genre", GenreSchema);
