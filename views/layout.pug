@@ -2,6 +2,50 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', type="text/css" href='/css/bootstrap.min.css')
+    script(src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js")
   body
+    nav(class="navbar navbar-expand-xl navbar-dark bg-dark")
+      div(class="container-fluid")
+        a(class="navbar-brand" href="/") Game Inventory Manager
+        div(class="collapse navbar-collapse show")
+          ul(class="navbar-nav")
+            li(class="nav-item dropdown")
+              a(class="nav-link dropdown-toggle" id="dropdownVideoGameMenuButton" role="button" data-bs-toggle="dropdown" aria-expanded="false") Video Games
+              ul(class="dropdown-menu" aria-labeledby="dropDownVideoGameMenuButton")
+                li
+                  a(class="dropdown-item" href="/catalog/videogames") View All
+                  a(class="dropdown-item" href="/catalog/videogame/create") Create
+            li(class="nav-item dropdown")
+              a(class="nav-link dropdown-toggle" id="dropdownPlatformMenuButton" role="button" data-bs-toggle="dropdown" aria-expanded="false") Platforms
+              ul(class="dropdown-menu" aria-labeledby="dropDownPlatformMenuButton")
+                li
+                  a(class="dropdown-item" href="/catalog/platforms") View All
+                  a(class="dropdown-item" href="/catalog/platform/create") Create
+            li(class="nav-item dropdown")
+              a(class="nav-link dropdown-toggle" id="dropdownCompanyMenuButton" role="button" data-bs-toggle="dropdown" aria-expanded="false") Companies
+              ul(class="dropdown-menu" aria-labeledby="dropDownCompanyMenuButton")
+                li
+                  a(class="dropdown-item" href="/catalog/companies") View All
+                  a(class="dropdown-item" href="/catalog/company/create") Create
+            li(class="nav-item dropdown")
+              a(class="nav-link dropdown-toggle" id="dropdownESRBMenuButton" role="button" data-bs-toggle="dropdown" aria-expanded="false") Age Ratings
+              ul(class="dropdown-menu" aria-labeledby="dropDownESRBMenuButton")
+                li
+                  a(class="dropdown-item" href="/catalog/ESRBRatings") View All
+                  a(class="dropdown-item" href="/catalog/ESRB/create") Create
+            li(class="nav-item dropdown")
+              a(class="nav-link dropdown-toggle" id="dropdownGenreMenuButton" role="button" data-bs-toggle="dropdown" aria-expanded="false") Genres
+              ul(class="dropdown-menu" aria-labeledby="dropDownGenreMenuButton")
+                li
+                  a(class="dropdown-item" href="/catalog/genres") View All
+                  a(class="dropdown-item" href="/catalog/genre/create") Create
+            li(class="nav-item dropdown")
+              a(class="nav-link dropdown-toggle" id="dropdownGameInstanceMenuButton" role="button" data-bs-toggle="dropdown" aria-expanded="false") Game Copies
+              ul(class="dropdown-menu" aria-labeledby="dropDownGameInstanceMenuButton")
+                li
+                  a(class="dropdown-item" href="/catalog/gameinstances") View All
+                  a(class="dropdown-item" href="/catalog/gameinstance/create") Create
+    div(class="container-fluid")
     block content

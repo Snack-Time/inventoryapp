@@ -1,13 +1,51 @@
 const VideoGame = require("../models/videogame");
+const Company = require("../models/company");
+const Platform = require("../models/platform");
+const Genre = require("../models/genre");
+const ESRB = require("../models/ESRB");
+const GameInstances = require("../models/gameinstance");
+
 const asyncHandler = require("express-async-handler");
 
 exports.index = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Site Home Page");
+  const [
+    numGames,
+    numCompanies,
+    numPlatforms,
+    numGenres,
+    numESRB,
+    numGameInstances,
+    numAvailableGameInstances,
+  ] = await Promise.all([
+    VideoGame.countDocuments({}).exec(),
+    Company.countDocuments({}).exec(),
+    Platform.countDocuments({}).exec(),
+    Genre.countDocuments({}).exec(),
+    ESRB.countDocuments({}).exec(),
+    GameInstances.countDocuments({}).exec(),
+    GameInstances.countDocuments({ status: "Available" }).exec(),
+  ]);
+
+  res.render("index", {
+    title: "Video Game Inventory Database Editor",
+    game_count: numGames,
+    company_count: numCompanies,
+    platform_count: numPlatforms,
+    genre_count: numGenres,
+    game_instance_count: numGameInstances,
+    game_instance_available_count: numAvailableGameInstances,
+    rating_count: numESRB,
+  });
 });
 
 // Display list of all videogames.
 exports.videogame_list = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: videogame list");
+  const videoGameList = await VideoGame.find({}, "name developer")
+    .sort({ name: 1 })
+    .populate("developer")
+    .exec();
+
+    res.render("game_list", { title: "List of Video Games in Database", game_list: videoGameList })
 });
 
 // Display detail page for a specific videogame.

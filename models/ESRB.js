@@ -12,4 +12,4 @@ ESRBSchema.virtual("url").get(function () {
     return `/catalog/ESRB/${this._id}`;
 });
 
-module.exports = mongoose.model("ESRB", ESRBSchema)
+module.exports = mongoose.model("ESRB", ESRBSchema);
