@@ -1,0 +1,33 @@
+extends layout 
+
+block content 
+    h1= title 
+    ul 
+        li Developed by: 
+            a(href=game.developer.url) #{game.developer.name}
+        li Published by: 
+            a(href=game.publisher.url) #{game.publisher.name}
+        li Age Rating: 
+            if game.ESRB != null
+                a(href=game.ESRB.url) #{game.ESRB.name}
+            else 
+                p N/A
+        li Release Date: 
+            if game.release_date != null
+                p #{game.release_date_formatted}
+            else 
+                p N/A        
+        li Genre: 
+            each val, index in game.genre 
+                a(href=val.url) #{val.name}
+                if index < game.genre.length - 1
+                    |,&nbsp;
+        li Platform: 
+            each val, index in game.platform 
+                a(href=val.url) #{val.name}
+                if index < game.platform.length - 1
+                    |,&nbsp;
+        
+        
+    p #[strong Description:] #{game.desc}
+

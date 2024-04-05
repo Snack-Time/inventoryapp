@@ -50,7 +50,22 @@ exports.videogame_list = asyncHandler(async (req, res, next) => {
 
 // Display detail page for a specific videogame.
 exports.videogame_detail = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: videogame detail: ${req.params.id}`);
+  const [game, gameInstances] = await Promise.all([
+    VideoGame.findById(req.params.id).populate("developer").populate("publisher").populate("platform").populate("ESRB").populate("genre").exec(),
+    GameInstances.find({ game: req.params.id }).exec(),
+  ]);
+
+  if (game === null) {
+    const err = new Error("Game not found")
+    err.status(404)
+    return next(err);
+  }
+
+  res.render("game_detail", {
+    title: game.name,
+    game: game,
+    game_instances: gameInstances,
+  });
 });
 
 // Display videogame create form on GET.

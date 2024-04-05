@@ -1,0 +1,28 @@
+extends layout 
+
+block content 
+    h1= title 
+    h3 Games developed by #{title}
+    if games_developed.length 
+        ul
+            each game in games_developed 
+                li
+                    a(href=game.url) #{game.name}
+    else
+        p No games developed by #{title}
+    h3 Games published by #{title}
+    if games_published.length
+        ul 
+            each game in games_published
+                li
+                    a(href=game.url) #{game.name}
+    else
+        p No games published by #{title}
+    h3 Platforms developed by #{title}
+    if platforms_developed.length
+        ul 
+            each platform in platforms_developed
+                li
+                    a(href=platform.url) #{platform.name}
+    else
+        p No platforms developed by #{title}
