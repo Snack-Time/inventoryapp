@@ -1,14 +1,35 @@
 const Platform = require("../models/platform");
+const VideoGame = require("../models/videogame")
 const asyncHandler = require("express-async-handler");
 
 // Display list of all platform.
 exports.platform_list = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: platform list");
+  const platformList = await Platform.find({}, "name developer")
+    .sort({ name: 1 })
+    .populate("developer")
+    .exec();
+
+    res.render("platform_list", { title: "List of Platforms in Database", platform_list: platformList })
 });
 
 // Display detail page for a specific platform.
 exports.platform_detail = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: platform detail: ${req.params.id}`);
+  const [platform, gamesOnPlatform] = await Promise.all([
+    Platform.findById(req.params.id).populate("developer").exec(),
+    VideoGame.find({ platform: req.params.id }, "name").sort({ name: 1}).exec(),
+  ])
+
+  if (platform === null) {
+    const err = new Error("Platform not found")
+    err.status(404)
+    return next(err);
+  }
+
+  res.render("platform_detail", {
+    title: platform.name,
+    platform: platform,
+    games_on_platform: gamesOnPlatform,
+  })
 });
 
 // Display platform create form on GET.
