@@ -1,0 +1,13 @@
+extends layout 
+
+block content 
+    h1= title 
+
+    p Games that are in the #{genre.name} genre in the database.
+        if genre_games.length
+            ul 
+                each game in genre_games
+                    li
+                        a(href=game.url) #{game.name}
+        else 
+            p No games in database in the #{genre.name} genre.
