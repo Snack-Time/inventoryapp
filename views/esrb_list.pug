@@ -1,0 +1,12 @@
+extends layout 
+
+block content 
+    h1= title
+    if esrb_list.length 
+        ul
+            each rating in esrb_list 
+                li
+                    a(href=rating.url) #{rating.name}
+    
+    else
+        p There are no ESRB age ratings in database.

@@ -1,14 +1,32 @@
 const ESRB = require("../models/ESRB")
+const VideoGame = require("../models/videogame")
 const asyncHandler = require("express-async-handler")
 
 // Display list of all companies.
-exports.esrb_list = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: esrb list");
+  exports.esrb_list = asyncHandler(async (req, res, next) => {
+    const ESRBList = await ESRB.find({}, "name").exec()
+
+    res.render("esrb_list", { title: "List of registered ESRB age ratings", esrb_list: ESRBList })
   });
   
   // Display detail page for a specific esrb.
   exports.esrb_detail = asyncHandler(async (req, res, next) => {
-    res.send(`NOT IMPLEMENTED: esrb detail: ${req.params.id}`);
+    const [esrb, gamesByAgeRating] = await Promise.all([
+      ESRB.findById(req.params.id).exec(),
+      VideoGame.find({ ESRB: req.params.id }, "name").sort({name: 1}).exec(),
+    ]);
+
+    if (esrb === null) {
+      const err = new Error("Rating not found")
+      err.status('404')
+      return next(err);
+    }
+
+    res.render("esrb_detail", {
+      title: esrb.name,
+      rating: esrb,
+      games_by_age_rating: gamesByAgeRating,
+    }) 
   });
   
   // Display esrb create form on GET.

@@ -1,0 +1,14 @@
+extends layout 
+
+block content 
+    h1= title 
+    h2= rating.desc
+
+    p Games that are rated #{rating.acronym} for #{rating.name}
+        if games_by_age_rating.length
+            ul 
+                each game in games_by_age_rating 
+                    li
+                        a(href=game.url) #{game.name}
+        else 
+            p No games in database rated #{rating.name}.

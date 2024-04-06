@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const VideoGameSchema = new Schema({
     name: { type: String, required: true, maxLength: 100},
-    ESRB: { type: Schema.Types.ObjectId, ref: "ESRB" },
+    ESRB: { type: Schema.Types.ObjectId, ref: "ESRB", required: true },
     release_date: { type: Date },
     developer: { type: Schema.Types.ObjectId, ref: "Company", required: true},
     publisher: { type: Schema.Types.ObjectId, ref: "Company", required: true},
