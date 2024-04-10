@@ -2,6 +2,7 @@ const Company = require("../models/company")
 const VideoGame = require("../models/videogame")
 const Platform = require("../models/platform")
 const asyncHandler = require("express-async-handler")
+const { body, validationResult } = require("express-validator")
 
 // Display list of all companies.
 exports.company_list = asyncHandler(async (req, res, next) => {
@@ -38,22 +39,88 @@ exports.company_list = asyncHandler(async (req, res, next) => {
   
   // Display company create form on GET.
   exports.company_create_get = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: company create GET");
+    res.render("company_form", { title: "Create Company" })
   });
   
   // Handle company create on POST.
-  exports.company_create_post = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: company create POST");
-  });
+  exports.company_create_post = [
+    body('name', 'Company name must be at least 3 characters')
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+
+    asyncHandler(async (req, res, next) => {
+      const errors = validationResult(req);
+      const company = new Company({ name: req.body.name });
+
+      if (!errors.isEmpty()) {
+        res.render("company_form", {
+          title: "Create company",
+          company: company,
+          errors: errors.array(),
+        });
+        return
+      } 
+      else {
+        const companyExists = await Company.findOne({ name: req.body.name }).collation({ locale: "en", strength: 2 }).exec()
+        if (companyExists) {
+          res.redirect(companyExists.url);
+        }
+        else {
+          await company.save();
+          res.redirect(company.url)
+        }
+      }
+    }),
+  ]
   
   // Display company delete form on GET.
   exports.company_delete_get = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: company delete GET");
+    const [company, companyGamesDevList, companyGamesPubList, companyPlatformDevList] = await Promise.all([
+      Company.findById(req.params.id).exec(),
+      VideoGame.find( { developer: req.params.id }, "name").exec(),
+      VideoGame.find( { publisher: req.params.id }, "name").exec(),
+      Platform.find( { developer: req.params.id }, "name").exec(),
+    ]);
+
+    if (company === null) {
+      res.redirect('catalog/companies');
+    }
+
+    res.render("company_delete", {
+      title: company.name,
+      company: company,
+      games_developed: companyGamesDevList,
+      games_published: companyGamesPubList,
+      platforms_developed: companyPlatformDevList,
+    })
   });
   
   // Handle company delete on POST.
   exports.company_delete_post = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: company delete POST");
+    const [company, companyGamesDevList, companyGamesPubList, companyPlatformDevList] = await Promise.all([
+      Company.findById(req.params.id).exec(),
+      VideoGame.find( { developer: req.params.id }, "name").exec(),
+      VideoGame.find( { publisher: req.params.id }, "name").exec(),
+      Platform.find( { developer: req.params.id }, "name").exec(),
+    ]);
+
+    if (companyGamesDevList.length > 0 || companyGamesPubList.length > 0 || companyPlatformDevList.length > 0) {
+      const companyItemCheck = 1;
+      res.render("company_delete", {
+        title: "Delete Company",
+        company: company,
+        games_developed: companyGamesDevList,
+        games_published: companyGamesPubList,
+        platforms_developed: companyPlatformDevList,
+        company_item_check: companyItemCheck,
+      });
+      return;
+    }
+    else {
+      await Company.findByIdAndDelete(req.body.companyid);
+      res.redirect('/catalog/companies')
+    }
   });
   
   // Display company update form on GET.

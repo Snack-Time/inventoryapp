@@ -1,0 +1,37 @@
+extends layout
+
+block content
+
+  h1 Delete: #{company.name}
+
+  if company_item_check != null
+
+    h2 Delete the following items associated with #{company.name} first.
+
+    if games_developed.length
+        h3 Games developed by #{company.name}
+        ul
+            each game in games_developed 
+                li
+                    a(href=game.url) #{game.name}
+    if games_published.length
+        h3 Games published by #{company.name}
+        ul 
+            each game in games_published
+                li
+                    a(href=game.url) #{game.name}
+    if platforms_developed.length
+        h3 Platforms developed by #{company.name}
+        ul 
+            each platform in platforms_developed
+                li
+                    a(href=platform.url) #{platform.name}
+
+
+  else
+  h5 Press button below to delete #{company.name}.
+    form(method='POST')
+      div.form-group
+        input#companyid.form-control(type='hidden', name='companyid', value=company._id )
+
+      button.btn.btn-primary(type='submit') Delete
