@@ -125,10 +125,40 @@ exports.company_list = asyncHandler(async (req, res, next) => {
   
   // Display company update form on GET.
   exports.company_update_get = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: company update GET");
+    const company = await Company.findById(req.params.id)
+
+    if (company === null) {
+      const err = new Error("Company not found")
+      err.status = 404
+      return next(err)
+    }
+
+    res.render("company_form", { title: "Create Company", company: company });
   });
   
   // Handle company update on POST.
-  exports.company_update_post = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: company update POST");
-  });
+  exports.company_update_post = [
+    body('name', 'Company name must be at least 3 characters')
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+
+    asyncHandler(async (req, res, next) => {
+      const errors = validationResult(req);
+      const company = new Company({ name: req.body.name, _id: req.params.id});
+
+      if (!errors.isEmpty()) {
+        res.render("company_form", {
+          title: "Create company",
+          company: company,
+          errors: errors.array(),
+        });
+        return
+      } 
+      else {
+          await Company.findByIdAndUpdate(req.params.id, company);
+          res.redirect(company.url)
+        }
+      }
+    ),
+  ]
