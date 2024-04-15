@@ -1,0 +1,22 @@
+extends layout
+
+block content
+
+  h1 Store ID: #{gameinstance.storeid}
+  h1 Database ID: #{gameinstance._id}
+
+  p #[strong Title: ]
+    a(href=gameinstance.videogame.url) #{gameinstance.videogame.name}
+  p #[strong Platform: ]
+    a(href=gameinstance.platform.url) #{gameinstance.platform.name}
+
+  p #[strong Status: ]
+    if gameinstance.status=='Available'
+      span.text-success #{gameinstance.status}
+    else if gameinstance.status=='Maintenance'
+      span.text-danger #{gameinstance.status}
+    else
+      span.text-warning #{gameinstance.status}
+
+  if gameinstance.status!='Available'
+    p #[strong Due back:] #{gameinstance.due_back_formatted}

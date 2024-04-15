@@ -52,7 +52,7 @@ exports.videogame_list = asyncHandler(async (req, res, next) => {
 exports.videogame_detail = asyncHandler(async (req, res, next) => {
   const [game, gameInstances] = await Promise.all([
     VideoGame.findById(req.params.id).populate("developer").populate("publisher").populate("platform").populate("ESRB").populate("genre").exec(),
-    GameInstances.find({ game: req.params.id }).exec(),
+    GameInstances.find({ videogame: req.params.id }).populate("videogame").populate("platform").exec(),
   ]);
 
   if (game === null) {

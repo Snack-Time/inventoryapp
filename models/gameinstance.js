@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const GameInstanceSchema = new Schema({
-  videogame: { type: Schema.Types.ObjectId, ref: "Video Game", required: true },
+  videogame: { type: Schema.Types.ObjectId, ref: "VideoGame", required: true },
   storeid: { type: String, required: true },
   platform: { type: Schema.Types.ObjectId, ref: "Platform", required: true},
   status: {

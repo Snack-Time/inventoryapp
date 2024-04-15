@@ -31,3 +31,20 @@ block content
         
     p #[strong Description:] #{game.desc}
 
+    h4 Store Copies in Database for #{game.name}
+    if game_instances.length
+        each copy in game_instances
+            ul
+                li
+                    a(href=copy.url) #{copy.videogame.name} (#{copy.storeid})
+                    ul 
+                        li Platform: #{copy.platform.name}
+                        li Status: 
+                        if copy.status=='Available'
+                            span.text-success #{copy.status}
+                        else if copy.status=='Maintenance'
+                            span.text-danger #{copy.status}
+                        else
+                            span.text-warning #{copy.status}
+        else
+            p No copies in store database.
