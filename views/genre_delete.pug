@@ -1,0 +1,24 @@
+extends layout
+
+block content
+
+  h1 Delete: #{genre.name}
+
+  if games_in_genre.length
+
+    h2 Delete the following items associated with #{genre.name} first.
+
+        h3 Games in the #{genre.name} genre.
+        ul
+            each game in games_in_genre 
+                li
+                    a(href=game.url) #{game.name}
+
+
+  else
+    h5 Press button below to delete #{genre.name}.
+        form(method='POST')
+            div.form-group
+                input#genreid.form-control(type='hidden', name='genreid', value=genre._id )
+
+            button.btn.btn-primary(type='submit') Delete

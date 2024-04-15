@@ -88,7 +88,7 @@ exports.company_list = asyncHandler(async (req, res, next) => {
     }
 
     res.render("company_delete", {
-      title: company.name,
+      title: "Delete Company",
       company: company,
       games_developed: companyGamesDevList,
       games_published: companyGamesPubList,

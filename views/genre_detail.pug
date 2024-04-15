@@ -11,3 +11,7 @@ block content
                         a(href=game.url) #{game.name}
         else 
             p No games in database in the #{genre.name} genre.
+
+    hr
+    p
+        a(href=genre.url+'/delete') Delete genre
