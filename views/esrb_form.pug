@@ -1,0 +1,22 @@
+extends layout
+
+block content
+
+  h1 #{title}
+
+  form(method='POST')
+    div.form-group
+      label(for='name') Name:
+      input#name.form-control(type='text', placeholder='Everyone, Teen, Mature, ect.' name='name' required value=(undefined===ESRB ? '' : ESRB.name) )
+    div.form-group
+      label(for='acronym') Acronym:
+      input#acronym.form-control(type='text', placeholder='E, T, M, ect.' name='acronym' required value=(undefined===ESRB ? '' : ESRB.acronym) )
+    div.form-group
+      label(for='desc') Description:
+      input#desc.form-control(type='text', placeholder='Description of the rating, i.e. "Suitable for Ages 7 and Up"' name='desc' required value=(undefined===ESRB ? '' : ESRB.desc) )    
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors
+    ul
+      for error in errors
+        li!= error.msg

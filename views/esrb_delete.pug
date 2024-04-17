@@ -1,0 +1,24 @@
+extends layout
+
+block content
+
+  h1 Delete: #{esrb.name}
+
+  if games_with_rating.length
+
+    h2 Delete the following items associated with #{esrb.name} first.
+
+        h3 Games with a #{esrb.acronym} for #{esrb.name} age rating.
+        ul
+            each game in games_with_rating 
+                li
+                    a(href=game.url) #{game.name}
+
+
+  else
+    h5 Press button below to delete #{esrb.name} rating.
+        form(method='POST')
+            div.form-group
+                input#ratingid.form-control(type='hidden', name='ratingid', value=esrb._id )
+
+            button.btn.btn-primary(type='submit') Delete

@@ -12,3 +12,7 @@ block content
                         a(href=game.url) #{game.name}
         else 
             p No games in database rated #{rating.name}.
+
+    hr
+    p
+        a(href=rating.url+'/delete') Delete rating
