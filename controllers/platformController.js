@@ -138,7 +138,7 @@ exports.platform_update_get = asyncHandler(async (req, res, next) => {
     return next(err)
   }
 
-  res.render("platform_form", { title: "Create Platform", platform: platform, developers: allDevelopers })
+  res.render("platform_form", { title: `Update ${platform.name}`, platform: platform, developers: allDevelopers })
 });
 
 // Handle platform update on POST.
@@ -163,7 +163,7 @@ exports.platform_update_post = [
 
     if (!errors.isEmpty()) {
       res.render("platform_form", {
-        title: "Create Platform",
+        title: `Update ${platform.name}`,
         platform: platform,
         developers: allDevelopers,
         errors: errors.array(),

@@ -133,7 +133,7 @@ exports.company_list = asyncHandler(async (req, res, next) => {
       return next(err)
     }
 
-    res.render("company_form", { title: "Create Company", company: company });
+    res.render("company_form", { title: `Update ${company.name}`, company: company });
   });
   
   // Handle company update on POST.
@@ -149,7 +149,7 @@ exports.company_list = asyncHandler(async (req, res, next) => {
 
       if (!errors.isEmpty()) {
         res.render("company_form", {
-          title: "Create company",
+          title: `Update ${company.name}`,
           company: company,
           errors: errors.array(),
         });

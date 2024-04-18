@@ -2,13 +2,13 @@ extends layout
 
 block content
 
-  h1 Delete: #{esrb.name}
+  h1 Delete: #{rating.name}
 
   if games_with_rating.length
 
-    h2 Delete the following items associated with #{esrb.name} first.
+    h2 Delete the following items associated with #{rating.name} first.
 
-        h3 Games with a #{esrb.acronym} for #{esrb.name} age rating.
+        h3 Games with a #{rating.acronym} for #{rating.name} age rating.
         ul
             each game in games_with_rating 
                 li
@@ -16,9 +16,9 @@ block content
 
 
   else
-    h5 Press button below to delete #{esrb.name} rating.
+    h5 Press button below to delete #{rating.name} rating.
         form(method='POST')
             div.form-group
-                input#ratingid.form-control(type='hidden', name='ratingid', value=esrb._id )
+                input#ratingid.form-control(type='hidden', name='ratingid', value=rating._id )
 
             button.btn.btn-primary(type='submit') Delete

@@ -57,7 +57,7 @@ const { body, validationResult } = require("express-validator")
       if (!errors.isEmpty()) {
         res.render("esrb_form", {
           title: "Create Rating",
-          esrb: esrb,
+          rating: esrb,
           errors: errors.array(),
         });
         return
@@ -88,7 +88,7 @@ const { body, validationResult } = require("express-validator")
   
     res.render("esrb_delete", {
       title: "Delete Rating",
-      esrb: esrb,
+      rating: esrb,
       games_with_rating: gamesRated,
     })
   });
@@ -103,7 +103,7 @@ const { body, validationResult } = require("express-validator")
     if (gamesRated.length > 0) {
       res.render("esrb_delete", {
         title: "Delete Rating",
-        esrb: esrb,
+        rating: esrb,
         games_with_rating: gamesRated,
       });
       return;
@@ -116,10 +116,47 @@ const { body, validationResult } = require("express-validator")
   
   // Display esrb update form on GET.
   exports.esrb_update_get = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: esrb update GET");
+    const esrb = await ESRB.findById(req.params.id)
+
+    if (esrb === null) {
+      const err = new Error("Rating not found")
+      err.status = 404
+      return next(err)
+    }
+
+    res.render("esrb_form", { title: `Update ${esrb.name} Rating`, rating: esrb });
   });
   
   // Handle esrb update on POST.
-  exports.esrb_update_post = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: esrb update POST");
-  });
+  exports.esrb_update_post = [
+    body('name', 'Rating name must be at least 3 characters')
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+    body('acronym', 'Rating acronym must be between 1 to 3 characters')
+    .trim()
+    .isLength({ max: 3, min: 1 })
+    .escape(),
+    body('desc', 'Description must be at least 3 characters')
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+
+    asyncHandler(async (req, res, next) => {
+      const errors = validationResult(req);
+      const esrb = new ESRB({ name: req.body.name, acronym: req.body.acronym, desc: req.body.desc, _id: req.params.id });
+
+      if (!errors.isEmpty()) {
+        res.render("esrb_form", {
+          title: `Update ${esrb.name}`,
+          rating: esrb,
+          errors: errors.array(),
+        });
+        return
+      } 
+      else {
+        await ESRB.findByIdAndUpdate(req.params.id, esrb);
+        res.redirect(esrb.url)
+      }
+    }),
+  ]
