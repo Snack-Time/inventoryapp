@@ -3,8 +3,13 @@ extends layout
 block content 
     h1= title 
     ul 
-        li Platform developed by: 
-            a(href=platform.developer.url) #{platform.developer.name}
+        if platform.release_date != null 
+            li Platform developed by: 
+                a(href=platform.developer.url) #{platform.developer.name}
+            li Release Date: #{platform.release_date}
+        else 
+            li Platform under development by: 
+                a(href=platform.developer.url) #{platform.developer.name}
         li Games on platform: 
             if games_on_platform.length && platform.name != "PlayStation 3" 
                 ul
