@@ -10,7 +10,7 @@ block content
       input#name.form-control(type='text', placeholder='Famicom, Genesis, N-Gage, Xbox, ect.' name='name' required value=(undefined===ESRB ? '' : ESRB.name) )
     div.form-group
       label(for='release_date') Release Date:
-      input#release_date.form-control(type='date', placeholder='12/26/1995' name='date' value=(undefined===platform ? '' : platform.release_date) )
+      input#release_date.form-control(type='date', placeholder='12/26/1995' name='release_date' value=(undefined===platform ? '' : platform.release_date) )
     div.form-group
       label(for='developer') Platform Developer:
       select#developer.form-control(name='developer' required)

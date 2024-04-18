@@ -6,7 +6,7 @@ block content
         if platform.release_date != null 
             li Platform developed by: 
                 a(href=platform.developer.url) #{platform.developer.name}
-            li Release Date: #{platform.release_date}
+            li Release Date: #{platform.release_date_formatted}
         else 
             li Platform under development by: 
                 a(href=platform.developer.url) #{platform.developer.name}

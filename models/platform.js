@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { DateTime } = require("luxon");
 
 const Schema = mongoose.Schema;
 
@@ -11,5 +12,9 @@ const PlatformSchema = new Schema({
 PlatformSchema.virtual("url").get(function () {
     return `/catalog/platform/${this._id}`;
 });
+
+PlatformSchema.virtual("release_date_formatted").get(function () {
+    return DateTime.fromJSDate(this.release_date).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY);
+})
 
 module.exports = mongoose.model("Platform", PlatformSchema);

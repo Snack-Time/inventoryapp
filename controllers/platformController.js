@@ -51,8 +51,9 @@ exports.platform_create_post = [
   .isLength({ max: 100 })
   .escape(),
   body('release_date', 'Release Date Error')
-  .isDate()
   .optional( {values: "falsy"})
+  .isISO8601()
+  .toDate()
   .escape(),
   body('developer', 'Pick a valid company')
   .trim()
