@@ -162,6 +162,7 @@ exports.platform_update_post = [
     const platform = new Platform({ name: req.body.name, release_date: req.body.release_date, developer: req.body.developer, _id: req.params.id });
 
     if (!errors.isEmpty()) {
+      const allDevelopers = await Company.find().sort({ name: 1 }).exec()
       res.render("platform_form", {
         title: `Update ${platform.name}`,
         platform: platform,

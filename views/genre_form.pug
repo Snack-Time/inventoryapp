@@ -6,7 +6,7 @@ block content
 
   form(method='POST')
     div.form-group
-      label(for='name') Genre:
+      label(for='name') Name of Genre:
       input#name.form-control(type='text', placeholder='Sports, FPS, ect.' name='name' required value=(undefined===genre ? '' : genre.name) )
     button.btn.btn-primary(type='submit') Submit
 
