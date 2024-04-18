@@ -1,0 +1,24 @@
+extends layout
+
+block content
+
+  h1 Delete: #{platform.name}
+
+  if games_on_platform.length
+
+    h2 Delete the following items associated with #{platform.name} first.
+
+        h3 Games on the #{platform.name} platform.
+        ul
+            each game in games_on_platform
+                li
+                    a(href=game.url) #{game.name}
+
+
+  else
+    h5 Press button below to delete #{platform.name}.
+        form(method='POST')
+            div.form-group
+                input#platformid.form-control(type='hidden', name='platformid', value=platform._id )
+
+            button.btn.btn-primary(type='submit') Delete

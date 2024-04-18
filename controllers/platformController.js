@@ -90,12 +90,41 @@ exports.platform_create_post = [
 
 // Display platform delete form on GET.
 exports.platform_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: platform delete GET");
+  const [platform, gamesOnPlatform] = await Promise.all([
+    Platform.findById(req.params.id).exec(),
+    VideoGame.find( { platform: req.params.id }, "name").exec(),
+  ]);
+
+  if (platform === null) {
+    res.redirect('/catalog/platforms');
+  }
+
+  res.render("platform_delete", {
+    title: "Delete Platform",
+    platform: platform,
+    games_on_platform: gamesOnPlatform,
+  })
 });
 
 // Handle platform delete on POST.
 exports.platform_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: platform delete POST");
+  const [platform, gamesOnPlatform] = await Promise.all([
+    Platform.findById(req.params.id).exec(),
+    VideoGame.find( { platform: req.params.id }, "name").exec(),
+  ]);
+
+  if (gamesOnPlatform.length > 0) {
+    res.render("platform_delete", {
+      title: "Delete Platform",
+      platform: platform,
+      games_on_platform: gamesOnPlatform,
+    })
+    return;
+  }
+  else {
+    await Platform.findByIdAndDelete(req.body.platformid);
+    res.redirect('/catalog/platforms')
+  }    
 });
 
 // Display platform update form on GET.
