@@ -129,10 +129,50 @@ exports.platform_delete_post = asyncHandler(async (req, res, next) => {
 
 // Display platform update form on GET.
 exports.platform_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: platform update GET");
+  const platform = await Platform.findById(req.params.id).populate('developer').populate('name').populate('release_date').exec()
+  const allDevelopers = await Company.find().sort({ name: 1 }).exec()
+
+  if (platform === null) {
+    const err = new Error("Platform not found")
+    err.status = 404
+    return next(err)
+  }
+
+  res.render("platform_form", { title: "Create Platform", platform: platform, developers: allDevelopers })
 });
 
 // Handle platform update on POST.
-exports.platform_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: platform update POST");
-});
+exports.platform_update_post = [
+  body('name', 'Platform name must be less than 100 characters. (Why are you trying to do that anyway???)')
+  .trim()
+  .isLength({ max: 100 })
+  .escape(),
+  body('release_date', 'Release Date Error')
+  .optional( {values: "falsy"})
+  .isISO8601()
+  .toDate()
+  .escape(),
+  body('developer', 'Pick a valid company')
+  .trim()
+  .isLength({ min: 1 })
+  .escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+    const platform = new Platform({ name: req.body.name, release_date: req.body.release_date, developer: req.body.developer, _id: req.params.id });
+
+    if (!errors.isEmpty()) {
+      res.render("platform_form", {
+        title: "Create Platform",
+        platform: platform,
+        developers: allDevelopers,
+        errors: errors.array(),
+      });
+      return
+    } 
+    else {
+      await Platform.findByIdAndUpdate(req.params.id, platform);
+      res.redirect(platform.url)
+    }
+  }),
+];

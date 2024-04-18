@@ -7,7 +7,7 @@ block content
   form(method='POST')
     div.form-group
       label(for='name') Name:
-      input#name.form-control(type='text', placeholder='Famicom, Genesis, N-Gage, Xbox, ect.' name='name' required value=(undefined===ESRB ? '' : ESRB.name) )
+      input#name.form-control(type='text', placeholder='Famicom, Genesis, N-Gage, Xbox, ect.' name='name' required value=(undefined===platform ? '' : platform.name) )
     div.form-group
       label(for='release_date') Release Date:
       input#release_date.form-control(type='date', placeholder='12/26/1995' name='release_date' value=(undefined===platform ? '' : platform.release_date) )
