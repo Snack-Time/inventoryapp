@@ -186,20 +186,164 @@ exports.videogame_create_post = [
 
 // Display videogame delete form on GET.
 exports.videogame_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: videogame delete GET");
+  const [game, allGameInstances] = await Promise.all([
+    VideoGame.findById(req.params.id).exec(),
+    GameInstances.find( { videogame: req.params.id }, "storeid").exec()
+  ])
+
+  if (game === null) {
+    res.redirect('/catalog/videogames')
+  }
+
+  res.render("game_delete", {
+    title: "Delete Game",
+    game: game,
+    game_copies: allGameInstances,
+  })
 });
 
 // Handle videogame delete on POST.
 exports.videogame_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: videogame delete POST");
+  const [game, allGameInstances] = await Promise.all([
+    VideoGame.findById(req.params.id).exec(),
+    GameInstances.find( { videogame: req.params.id }, "storeid").exec()
+  ])
+
+  if (allGameInstances.length > 0) {
+    res.render("game_delete", {
+      title: "Delete Game",
+      game: game,
+      game_copies: allGameInstances,
+    })
+    return
+  }
+  else {
+    await VideoGame.findByIdAndDelete(req.body.gameid);
+    res.redirect('/catalog/videogames')
+  }    
 });
 
 // Display videogame update form on GET.
 exports.videogame_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: videogame update GET");
+  const [game, allCompanies, allGenres, allPlatforms, allRatings] = await Promise.all([
+    VideoGame.findById(req.params.id).populate('name').populate('ESRB').populate('developer').populate('publisher').populate('platform').populate('genre').exec(),
+    Company.find().sort({ name: 1 }).exec(),
+    Genre.find().sort({ name: 1 }).exec(),
+    Platform.find().sort({ name: 1 }).exec(),
+    ESRB.find().sort({ name: 1 }).exec(),
+  ]);
+
+  if (game === null) {
+    const err = new Error("Game not found")
+    err.status = 404
+    return next(err)
+  }
+
+  res.render('game_form', {
+    title: `Update ${game.name}`,
+    companies: allCompanies,
+    genres: allGenres,
+    platforms: allPlatforms,
+    ratings: allRatings,
+    game: game,
+  })
 });
 
 // Handle videogame update on POST.
-exports.videogame_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: videogame update POST");
-});
+exports.videogame_update_post = [
+  (req, res, next) => {
+    if (!Array.isArray(req.body.genre)) {
+      req.body.genre =
+        typeof req.body.genre === "undefined" ? [] : [req.body.genre];
+    }
+    next();
+  },
+
+  (req, res, next) => {
+    if (!Array.isArray(req.body.platform)) {
+      req.body.platform =
+        typeof req.body.platform === "undefined" ? [] : [req.body.platform];
+    }
+    next();
+  },
+
+
+  body('name', 'Platform name must be less than 100 characters. (Why are you trying to do that anyway???)')
+    .trim()
+    .isLength({ max: 100 })
+    .escape(),
+  body('ESRB', 'Age Rating error')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('release_date', 'Release Date Error')
+    .optional( {values: "falsy"})
+    .isISO8601()
+    .toDate()
+    .escape(),
+  body('developer', 'Pick a valid developer')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('publisher', 'Pick a valid publisher')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('platform.*').escape(),
+  body('genre.*').escape(),
+  body('desc', 'Description required')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+    const game = new VideoGame({
+      name: req.body.name,
+      ESRB: req.body.ESRB,
+      release_date: req.body.release_date,
+      developer: req.body.developer,
+      publisher: req.body.publisher,
+      platform: typeof req.body.platform === "undefined" ? [] : req.body.platform,
+      genre: typeof req.body.genre === "undefined" ? [] : req.body.genre,
+      desc: req.body.desc,
+      _id: req.params.id,
+    })
+
+    if(!errors.isEmpty()) {
+      const [allCompanies, allGenres, allPlatforms, allRatings] = await Promise.all([
+        Company.find().sort({ name: 1 }).exec(),
+        Genre.find().sort({ name: 1 }).exec(),
+        Platform.find().sort({ name: 1 }).exec(),
+        ESRB.find().sort({ name: 1 }).exec(),
+      ])
+
+      for (const genre of allGenres) {
+        if (game.genre.includes(genre._id)) {
+          genre.checked = "true";
+        }
+      }
+
+      for (const platform of allPlatforms) {
+        if (game.platform.includes(platform._id)) {
+          platform.checked = "true";
+        }
+      }
+
+      res.render('game_form', {
+        title: 'Create Video Game',
+        companies: allCompanies,
+        genres: allGenres,
+        platforms: allPlatforms,
+        ratings: allRatings,
+        game: game,
+        errors: errors.array(),
+      })
+      return
+    }
+
+    else {
+      const updatedGame = await VideoGame.findByIdAndUpdate(req.params.id, game, {})
+      res.redirect(updatedGame.url);
+    }
+})]

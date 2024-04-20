@@ -1,0 +1,24 @@
+extends layout
+
+block content
+
+  h1 Delete: #{game.name}
+
+  if game_copies.length
+
+    h2 Delete the following copies associated with #{game.name} first.
+
+        h3 Copies of #{game.name} on the store database.
+        ul
+            each game in game_copies
+                li
+                    a(href=game.url) #{game.storeid}
+
+
+  else
+    h5 Press button below to delete #{game.name}.
+        form(method='POST')
+            div.form-group
+                input#gameid.form-control(type='hidden', name='gameid', value=game._id )
+
+            button.btn.btn-primary(type='submit') Delete
