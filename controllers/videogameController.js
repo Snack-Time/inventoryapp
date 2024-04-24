@@ -41,9 +41,10 @@ exports.index = asyncHandler(async (req, res, next) => {
 
 // Display list of all videogames.
 exports.videogame_list = asyncHandler(async (req, res, next) => {
-  const videoGameList = await VideoGame.find({}, "name developer")
+  const videoGameList = await VideoGame.find({}, "name developer publisher")
     .sort({ name: 1 })
     .populate("developer")
+    .populate("publisher")
     .exec();
 
     res.render("game_list", { title: "List of Video Games in Database", game_list: videoGameList })

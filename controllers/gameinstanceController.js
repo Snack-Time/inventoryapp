@@ -1,7 +1,10 @@
 const GameInstance = require("../models/gameinstance");
 const VideoGame = require('../models/videogame');
-const Platform = require('../models/platform')
+const Platform = require('../models/platform');
+
 const asyncHandler = require("express-async-handler");
+const { body, validationResult } = require("express-validator");
+
 
 // Display list of all gameinstances.
 exports.gameinstance_list = asyncHandler(async (req, res, next) => {
@@ -20,28 +23,77 @@ exports.gameinstance_detail = asyncHandler(async (req, res, next) => {
   .populate("platform")
   .exec();
 
-if (gameInstance === null) {
-  // No results.
-  const err = new Error("Game copy not found");
-  err.status = 404;
-  return next(err);
+  if (gameInstance === null) {
+    // No results.
+    const err = new Error("Game copy not found");
+    err.status = 404;
+    return next(err);
 }
 
-res.render("gameinstance_detail", {
-  title: "Game:",
-  gameinstance: gameInstance,
-});
-});
+  res.render("gameinstance_detail", {
+    title: "Game:",
+    gameinstance: gameInstance,
+  });
+  });
 
 // Display gameinstance create form on GET.
 exports.gameinstance_create_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: gameinstance create GET");
-});
+  const allGames = await VideoGame.find({}, "name platform").sort({ name: 1 }).populate("platform").exec()
+  const allPlatforms = await Platform.find({}, "name").sort({ name: 1 }).exec()
+  
+  res.render('gameinstance_form', {
+    title: "Create Game Copy",
+    game_list: allGames,
+    platform_list: allPlatforms,
+  })
 
+  });
 // Handle gameinstance create on POST.
-exports.gameinstance_create_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: gameinstance create POST");
-});
+exports.gameinstance_create_post = [
+  body('videogame', 'Please select a game.').trim().isLength({ min: 1 }).escape(),
+  body('platform')
+    .trim()
+    .isLength({ min: 1 })
+    .custom(async (value, { req }) => {
+      const game = await VideoGame.findById(req.body.videogame).exec()
+      if (game.platform.includes(value) === false) {
+        throw new Error('Game not made for selected platform.')
+      }
+    })
+    .escape(),
+  body('storeid', 'Please input a valid ID with at least 3 characters.').trim().isLength({ min: 3 }).escape(),
+  body('due_back', 'Invalid date.').optional({values: "falsy"}).isISO8601().toDate(),
+  body('status').escape(),
+  
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+    const gameInstance = new GameInstance({
+      videogame: req.body.videogame,
+      platform: req.body.platform,
+      storeid: req.body.storeid,
+      status: req.body.status,
+      due_back: req.body.due_back,
+      _id: req.params.id,
+    })
+
+    if(!errors.isEmpty()) {
+      const allGames = await VideoGame.find({}, "name platform").sort({ name: 1 }).populate("platform").exec()
+      const allPlatforms = await Platform.find({}, "name").sort({ name: 1 }).exec()
+      
+      res.render('gameinstance_form', {
+        title: "Create Game Copy",
+        game_list: allGames,
+        platform_list: allPlatforms,
+        gameinstance: gameInstance,
+        errors: errors.array(),
+      })
+    }
+    else {
+      await gameInstance.save();
+      res.redirect(gameInstance.url)
+    }
+  })
+];
 
 // Display gameinstance delete form on GET.
 exports.gameinstance_delete_get = asyncHandler(async (req, res, next) => {

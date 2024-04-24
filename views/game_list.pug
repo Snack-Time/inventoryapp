@@ -1,13 +1,24 @@
 extends layout 
 
 block content 
-    h1= title
+    h1(class='text-center')= title
     if game_list.length 
-        ul
-            each game in game_list 
-                li
-                    a(href=game.url) #{game.name}
-                    p by #{game.developer.name}
-    
+        table(class="table table-hover table-responsive")
+            thead 
+                tr 
+                    th(scope="col") #
+                    th(scope="col") Name
+                    th(scope="col") Developer
+                    th(scope="col") Publisher
+            tbody
+                each game, index in game_list 
+                    tr
+                        th(scope="col") #{index}
+                        th(scope="col") 
+                            a(href=game.url) #{game.name}
+                        th(scope="col") 
+                            a(href=game.developer.url) #{game.developer.name} 
+                        th(scope="col")
+                            a(href=game.publisher.url) #{game.publisher.name}
     else
         p There are no games.
