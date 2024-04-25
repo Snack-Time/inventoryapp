@@ -5,7 +5,7 @@ block content
   h1 Store ID: #{gameinstance.storeid}
   h1 Database ID: #{gameinstance._id}
 
-  p #[strong Title: ]
+  p #[strong Name: ]
     a(href=gameinstance.videogame.url) #{gameinstance.videogame.name}
   p #[strong Platform: ]
     a(href=gameinstance.platform.url) #{gameinstance.platform.name}
@@ -20,3 +20,10 @@ block content
 
   if gameinstance.status!='Available'
     p #[strong Due back:] #{gameinstance.due_back_formatted}
+
+  hr
+  p
+    a(href=gameinstance.url+'/delete') Delete game
+  hr
+  p
+    a(href=gameinstance.url+'/update') Update game
