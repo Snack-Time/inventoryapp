@@ -1,13 +1,22 @@
 extends layout 
 
 block content 
-    h1= title
+    h1(class='text-center')= title
     if platform_list.length 
-        ul
-            each platform in platform_list 
-                li
-                    a(href=platform.url) #{platform.name}
-                    p by #{platform.developer.name}
+        table(class="table table-hover table-responsive")
+            thead 
+                tr 
+                    th(scope="col") #
+                    th(scope="col") Name
+                    th(scope="col") Developer
+            tbody
+                each platform, index in platform_list 
+                    tr
+                        th(scope="col") #{index}
+                        th(scope="col") 
+                            a(href=platform.url) #{platform.name}
+                        th(scope="col") 
+                            a(href=platform.developer.url) #{platform.developer.name} 
     
     else
         p There are no platforms in database.

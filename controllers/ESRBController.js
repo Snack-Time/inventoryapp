@@ -5,7 +5,7 @@ const { body, validationResult } = require("express-validator")
 
 // Display list of all companies.
   exports.esrb_list = asyncHandler(async (req, res, next) => {
-    const ESRBList = await ESRB.find({}, "name").exec()
+    const ESRBList = await ESRB.find({}, "name acronym desc").exec()
 
     res.render("esrb_list", { title: "List of registered ESRB age ratings", esrb_list: ESRBList })
   });

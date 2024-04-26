@@ -1,12 +1,21 @@
 extends layout 
 
 block content 
-    h1= title
+    h1(class='text-center')= title
     if company_list.length 
-        ul
-            each company in company_list 
-                li
-                    a(href=company.url) #{company.name}
+        table(class="table table-hover table-responsive")
+            thead 
+                tr 
+                    th(scope="col") #
+                    th(scope="col") Company
+                    th(scope="col") Database ID
+            tbody
+                each company, index in company_list 
+                    tr
+                        th(scope="col") #{index}
+                        th(scope="col") 
+                            a(href=company.url) #{company.name}
+                        th(scope="col") #{company._id}
     
     else
         p There are no companies in database.
