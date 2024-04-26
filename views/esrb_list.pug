@@ -3,21 +3,22 @@ extends layout
 block content 
     h1(class='text-center')= title
     if esrb_list.length 
-        table(class="table table-hover table-responsive")
-            thead 
-                tr 
-                    th(scope="col") #
-                    th(scope="col") Name
-                    th(scope="col") Acronym
-                    th(scope="col") Description
-            tbody
-                each esrb, index in esrb_list 
-                    tr
-                        th(scope="col") #{index}
-                        th(scope="col") 
-                            a(href=esrb.url) #{esrb.name}
-                        th(scope="col") #{esrb.acronym}
-                        th(scope="col") #{esrb.desc}
-    
+        div(class='container')
+            table(class="table table-hover table-bordered table-responsive")
+                thead 
+                    tr 
+                        th(scope="col") #
+                        th(scope="col") Name
+                        th(scope="col") Acronym
+                        th(scope="col") Description
+                tbody
+                    each esrb, index in esrb_list 
+                        tr
+                            th(scope="col") #{index}
+                            th(scope="col") 
+                                a(href=esrb.url) #{esrb.name}
+                            th(scope="col") #{esrb.acronym}
+                            th(scope="col") #{esrb.desc}
+        
     else
         p There are no ESRB age ratings in database.
