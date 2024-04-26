@@ -10,6 +10,7 @@ block content
                 tr 
                     th(scope="col") #
                     th(scope="col") Name
+                    th(scope="col") Platform
                     th(scope="col") Status
                     th(scope="col") Due Date 
                     th(scope="col") Store ID 
@@ -19,6 +20,8 @@ block content
                         th(scope="col") #{index}
                         th(scope="col") 
                           a(href=copy.url) #{copy.videogame.name}
+                        th(scope="col")
+                          a(href=copy.platform.url) #{copy.platform.name}
                         th(scope="col")
                           if copy.status=='Available'
                             span.text-success #{copy.status}

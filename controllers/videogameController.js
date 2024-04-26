@@ -189,7 +189,7 @@ exports.videogame_create_post = [
 exports.videogame_delete_get = asyncHandler(async (req, res, next) => {
   const [game, allGameInstances] = await Promise.all([
     VideoGame.findById(req.params.id).exec(),
-    GameInstances.find( { videogame: req.params.id }, "storeid").exec()
+    GameInstances.find({ videogame: req.params.id }).populate("videogame").populate("platform").exec(),
   ])
 
   if (game === null) {

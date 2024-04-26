@@ -2,23 +2,32 @@ extends layout
 
 block content
 
-  h1 Delete: #{game.name}
+  h1(class="text-center") Delete: #{game.name}
 
   if game_copies.length
-
-    h2 Delete the following copies associated with #{game.name} first.
-
-        h3 Copies of #{game.name} on the store database.
-        ul
-            each game in game_copies
-                li
-                    a(href=game.url) #{game.storeid}
+    p &nbsp;
+    h2(class='text-center') Delete the following copies associated with #{game.name} first.
+    each copy in game_copies
+        div(class='container')
+            a(class="h5" href=copy.url) #{copy.storeid}
+            div(class="list-group")
+                li(class='list-group-item') #{copy.videogame.name}
+                li(class='list-group-item') Platform: #{copy.platform.name}
+                    if copy.status=='Available'
+                        li(class='list-group-item list-group-item-success') #{copy.status}
+                    else if copy.status=='Maintenance'
+                        li(class='list-group-item list-group-item-danger') #{copy.status}
+                    else
+                        li(class='list-group-item list-group-item-warning') #{copy.status}
+                        li(class='list-group-item list-group-item-warning') Due date: #{copy.due_back_formatted}
+        p &nbsp;
+            
 
 
   else
-    h5 Press button below to delete #{game.name}.
-        form(method='POST')
-            div.form-group
-                input#gameid.form-control(type='hidden', name='gameid', value=game._id )
+    form(method='POST' class="text-center")
+        h3 You cannot undo this action!
+        div.form-group
+            input#gameid.form-control(type='hidden', name='gameid', value=game._id )
 
-            button.btn.btn-primary(type='submit') Delete
+        button.btn.btn-primary(type='submit' class='btn btn-danger btn-lg') Delete #{game.name} From Database

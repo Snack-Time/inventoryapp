@@ -1,56 +1,50 @@
 extends layout 
 
 block content 
-    h1= title 
-    ul 
-        li Developed by: 
-            a(href=game.developer.url) #{game.developer.name}
-        li Published by: 
-            a(href=game.publisher.url) #{game.publisher.name}
-        li Age Rating: 
+    h1(class='text-center')= title 
+    div(class='container')
+        div(class="list-group")
+            a(href=game.developer.url class='list-group-item list-group-item-action') Developed by: #{game.developer.name}
+            a(href=game.publisher.url class='list-group-item list-group-item-action') Published by: #{game.publisher.name}
             if game.ESRB != null
-                a(href=game.ESRB.url) #{game.ESRB.name}
+                a(href=game.ESRB.url class='list-group-item list-group-item-action') Rated: #{game.ESRB.name}
             else 
-                p N/A
-        li Release Date: 
+                li(class='list-group-item') No rating yet.
             if game.release_date != null
-                p #{game.release_date_formatted}
+                li(class='list-group-item') Release Date: #{game.release_date_formatted}
             else 
                 p N/A        
-        li Genre: 
-            each val, index in game.genre 
-                a(href=val.url) #{val.name}
-                if index < game.genre.length - 1
-                    |,&nbsp;
-        li Platform: 
-            each val, index in game.platform 
-                a(href=val.url) #{val.name}
-                if index < game.platform.length - 1
-                    |,&nbsp;
-        
-        
-    p #[strong Description:] #{game.desc}
+            li(class='list-group-item') Genre: 
+                each val, index in game.genre 
+                    a(href=val.url) #{val.name}
+                    if index < game.genre.length - 1
+                        |,&nbsp;
+            li(class='list-group-item') Platform: 
+                each val, index in game.platform 
+                    a(href=val.url) #{val.name}
+                    if index < game.platform.length - 1
+                        |,&nbsp;
+            li(class='list-group-item') #[strong Description:] #{game.desc}
+            p &nbsp;
 
-    h4 Store Copies in Database for #{game.name}
-    if game_instances.length
-        each copy in game_instances
-            ul
-                li
-                    a(href=copy.url) #{copy.videogame.name} (#{copy.storeid})
-                    ul 
-                        li Platform: #{copy.platform.name}
-                        li Status: 
-                        if copy.status=='Available'
-                            span.text-success #{copy.status}
-                        else if copy.status=='Maintenance'
-                            span.text-danger #{copy.status}
-                        else
-                            span.text-warning #{copy.status}
+    h4(class='text-center') Store Copies in Database for #{game.name}
+    div(class='container')
+        if game_instances.length
+            each copy in game_instances
+                a(class="h5" href=copy.url) #{copy.storeid}
+                div(class="list-group")
+                    li(class='list-group-item') #{copy.videogame.name}
+                    li(class='list-group-item') Platform: #{copy.platform.name}
+                    if copy.status=='Available'
+                        li(class='list-group-item list-group-item-success') #{copy.status}
+                    else if copy.status=='Maintenance'
+                        li(class='list-group-item list-group-item-danger') #{copy.status}
+                    else
+                        li(class='list-group-item list-group-item-warning') #{copy.status}
+                        li(class='list-group-item list-group-item-warning') Due date: #{copy.due_back_formatted}
+                    p &nbsp;
         else
-            p No copies in store database.
-    hr
-    p
-        a(href=game.url+'/delete') Delete game
-    hr
-    p
-        a(href=game.url+'/update') Update game
+            p(class='text-center') No copies in store database.
+        div(class="d-flex justify-content-around")
+            a(href=game.url+'/update' class='btn btn-primary') Update game 
+            a(href=game.url+'/delete' class='btn btn-danger') Delete game 

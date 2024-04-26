@@ -18,7 +18,7 @@ exports.platform_list = asyncHandler(async (req, res, next) => {
 exports.platform_detail = asyncHandler(async (req, res, next) => {
   const [platform, gamesOnPlatform] = await Promise.all([
     Platform.findById(req.params.id).populate("developer").exec(),
-    VideoGame.find({ platform: req.params.id }, "name").sort({ name: 1}).exec(),
+    VideoGame.find({ platform: req.params.id }, "name developer publisher").sort({ name: 1}).populate('developer').populate('publisher').exec(),
   ])
 
   if (platform === null) {

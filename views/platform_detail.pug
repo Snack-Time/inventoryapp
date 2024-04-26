@@ -1,28 +1,37 @@
 extends layout 
 
 block content 
-    h1= title 
-    ul 
-        if platform.release_date != null 
-            li Platform developed by: 
-                a(href=platform.developer.url) #{platform.developer.name}
-            li Release Date: #{platform.release_date_formatted}
-        else 
-            li Platform under development by: 
-                a(href=platform.developer.url) #{platform.developer.name}
-        li Games on platform: 
-            if games_on_platform.length && platform.name != "PlayStation 3" 
-                ul
-                    each game in games_on_platform
-                        li
-                            a(href=game.url) #{game.name}
+    h1(class='text-center')= title 
+    div(class='container')
+        div(class='list-group')
+            if platform.release_date != null 
+                a(href=platform.developer.url class='list-group-item list-group-item-action') Platform developed by: #{platform.developer.name}
+                li(class='list-group-item') Release Date: #{platform.release_date_formatted}
             else 
-                ul 
-                    li The #{platform.name} has no games.
-
-    hr
-    p
-        a(href=platform.url+'/delete') Delete platform
-    hr
-    p
-        a(href=platform.url+'/update') Update platform
+                a(href=platform.developer.url class='list-group-item list-group-item-action') Platform under development by: #{platform.developer.name}
+        p &nbsp;
+        p(class="h3 text-center") Games on Platform 
+            if games_on_platform.length && platform.name != "PlayStation 3" 
+                div(class="container")
+                    table(class="table table-hover table-bordered table-responsive")
+                        thead 
+                            tr 
+                                th(scope="col") #
+                                th(scope="col") Name
+                                th(scope="col") Developer
+                                th(scope="col") Publisher
+                        tbody
+                            each game, index in games_on_platform 
+                                tr
+                                    th(scope="col") #{index}
+                                    th(scope="col") 
+                                        a(href=game.url) #{game.name}
+                                    th(scope="col") 
+                                        a(href=game.developer.url) #{game.developer.name} 
+                                    th(scope="col")
+                                        a(href=game.publisher.url) #{game.publisher.name}
+            else 
+                p(class="h5 text-center") The #{platform.name} has no games.
+        div(class="d-flex justify-content-around")
+            a(href=platform.url+'/update' class='btn btn-primary') Update platform 
+            a(href=platform.url+'/delete' class='btn btn-danger') Delete platform 
