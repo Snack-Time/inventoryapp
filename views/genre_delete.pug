@@ -2,23 +2,20 @@ extends layout
 
 block content
 
-  h1 Delete: #{genre.name}
-
-  if games_in_genre.length
-
-    h2 Delete the following items associated with #{genre.name} first.
-
-        h3 Games in the #{genre.name} genre.
-        ul
-            each game in games_in_genre 
-                li
-                    a(href=game.url) #{game.name}
+  div(class='container')
+    h1(class='text-center') Delete #{genre.name} 
+        p &nbsp;
+    if games_in_genre.length
+        h2(class='text-center') Delete or Update these games first to remove them from the #{genre.name} genre
+        each game in games_in_genre 
+            ul(class="list-group")
+                a(href=game.url class='list-group-item list-group-item-action') #{game.name}
 
 
-  else
-    h5 Press button below to delete #{genre.name}.
-        form(method='POST')
+    else
+        form(method='POST' class='text-center')
+            h3 You cannot undo this!
             div.form-group
                 input#genreid.form-control(type='hidden', name='genreid', value=genre._id )
 
-            button.btn.btn-primary(type='submit') Delete
+            button.btn.btn-primary(type='submit' class='btn btn-danger btn-lg') Delete #{genre.name}

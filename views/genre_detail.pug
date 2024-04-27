@@ -1,20 +1,16 @@
 extends layout 
 
 block content 
-    h1= title 
+    div(class='container')
+        h1(class='text-center')=title 
+        if genre_games.length 
+            h3 Games in #{genre.name} genre
+            each game in genre_games 
+                ul(class="list-group")
+                    a(href=game.url class='list-group-item list-group-item-action') #{game.name}
+        else
+            h3 No games in #{title} genre.
 
-    p Games that are in the #{genre.name} genre in the database.
-        if genre_games.length
-            ul 
-                each game in genre_games
-                    li
-                        a(href=game.url) #{game.name}
-        else 
-            p No games in database in the #{genre.name} genre.
-
-    hr
-    p
-        a(href=genre.url+'/delete') Delete genre
-    hr
-    p
-        a(href=genre.url+'/update') Update genre
+        div(class="d-flex justify-content-around")
+            a(href=genre.url+'/update' class='btn btn-primary') Update genre 
+            a(href=genre.url+'/delete' class='btn btn-danger') Delete genre 

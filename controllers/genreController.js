@@ -28,7 +28,7 @@ exports.genre_detail = asyncHandler(async (req, res, next) => {
   }
 
   res.render("genre_detail", {
-    title: "Genre Detail",
+    title: genre.name,
     genre: genre,
     genre_games: gamesInGenre,
   });
