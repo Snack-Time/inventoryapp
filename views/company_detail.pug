@@ -1,35 +1,33 @@
 extends layout 
 
 block content 
-    h1= title 
-    h3 Games developed by #{title}
-    if games_developed.length 
-        ul
+    div(class='container')
+        h1(class='text-center')= title 
+        if games_developed.length 
+            h3 Games developed by #{title}
             each game in games_developed 
-                li
-                    a(href=game.url) #{game.name}
-    else
-        p No games developed by #{title}
-    h3 Games published by #{title}
-    if games_published.length
-        ul 
+                ul(class="list-group")
+                    a(href=game.url class='list-group-item list-group-item-action') #{game.name}
+        else
+            h3 No games developed by #{title}
+        p &nbsp;
+        if games_published.length
+            h3 Games published by #{title}
             each game in games_published
-                li
-                    a(href=game.url) #{game.name}
-    else
-        p No games published by #{title}
-    h3 Platforms developed by #{title}
-    if platforms_developed.length
-        ul 
+                ul(class="list-group")
+                    a(href=game.url class='list-group-item list-group-item-action') #{game.name}
+        else
+            h3 No games published by #{title}
+        p &nbsp;
+        if platforms_developed.length
+            h3 Platforms developed by #{title}
             each platform in platforms_developed
-                li
-                    a(href=platform.url) #{platform.name}
-    else
-        p No platforms developed by #{title}
+                ul(class="list-group")
+                    a(href=platform.url class='list-group-item list-group-item-action') #{platform.name}
+        else
+            h3 No platforms developed by #{title}
+        p &nbsp;
 
-    hr
-    p
-        a(href=company.url+'/delete') Delete company
-    hr
-    p
-        a(href=company.url+'/update') Update company
+        div(class="d-flex justify-content-around")
+            a(href=company.url+'/update' class='btn btn-primary') Update company 
+            a(href=company.url+'/delete' class='btn btn-danger') Delete company 

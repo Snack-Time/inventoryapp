@@ -2,36 +2,38 @@ extends layout
 
 block content
 
-  h1 Delete: #{company.name}
+  h1(class='text-center') Delete: #{company.name}
+  p &nbsp;
 
-  if company_item_check != null
+  if games_developed.length || games_published.length || platforms_developed.length
+    div(class='container')
+      h3(class='text-center') Delete the following items associated with #{company.name} first.
+      p &nbsp;
 
-    h2 Delete the following items associated with #{company.name} first.
-
-    if games_developed.length
-        h3 Games developed by #{company.name}
-        ul
-            each game in games_developed 
-                li
-                    a(href=game.url) #{game.name}
-    if games_published.length
-        h3 Games published by #{company.name}
-        ul 
-            each game in games_published
-                li
-                    a(href=game.url) #{game.name}
-    if platforms_developed.length
-        h3 Platforms developed by #{company.name}
-        ul 
-            each platform in platforms_developed
-                li
-                    a(href=platform.url) #{platform.name}
+      if games_developed.length
+              h3 Games developed by #{company.name}
+              each game in games_developed 
+                  ul(class="list-group")
+                      a(href=game.url class='list-group-item list-group-item-action') #{game.name}
+      p &nbsp;
+      if games_published.length
+              h3 Games published by #{company.name}
+              each game in games_published
+                  ul(class="list-group")
+                      a(href=game.url class='list-group-item list-group-item-action') #{game.name}
+      p &nbsp;
+      if platforms_developed.length
+              h3 Platforms developed by #{company.name}
+              each platform in platforms_developed
+                  ul(class="list-group")
+                      a(href=platform.url class='list-group-item list-group-item-action') #{platform.name}
+      p &nbsp;
 
 
   else
-  h5 Press button below to delete #{company.name}.
-    form(method='POST')
-      div.form-group
-        input#companyid.form-control(type='hidden', name='companyid', value=company._id )
+      form(method='POST' class='text-center')
+        h3 You cannot undo this!
+        div.form-group
+          input#companyid.form-control(type='hidden', name='companyid', value=company._id )
 
-      button.btn.btn-primary(type='submit') Delete
+        button.btn.btn-primary(type='submit' class='btn btn-danger btn-lg') Delete #{company.name}
