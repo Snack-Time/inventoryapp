@@ -2,23 +2,37 @@ extends layout
 
 block content
 
-  h1 Delete: #{platform.name}
+  h1(class='text-center') Delete: #{platform.name}
+    p &nbsp;
 
   if games_on_platform.length
 
-    h2 Delete the following items associated with #{platform.name} first.
+    h3(class='text-center') Delete or Update the following games associated with #{platform.name} first.
 
-        h3 Games on the #{platform.name} platform.
-        ul
-            each game in games_on_platform
-                li
-                    a(href=game.url) #{game.name}
+    div(class="container")
+        table(class="table table-hover table-bordered table-responsive")
+            thead 
+                tr 
+                    th(scope="col") #
+                    th(scope="col") Name
+                    th(scope="col") Developer
+                    th(scope="col") Publisher
+            tbody
+                each game, index in games_on_platform 
+                    tr
+                        th(scope="col") #{index}
+                        th(scope="col") 
+                            a(href=game.url) #{game.name}
+                        th(scope="col") 
+                            a(href=game.developer.url) #{game.developer.name} 
+                        th(scope="col")
+                            a(href=game.publisher.url) #{game.publisher.name}
 
 
   else
-    h5 Press button below to delete #{platform.name}.
-        form(method='POST')
+        form(method='POST' class='text-center')
+            h3 You cannot undo this!
             div.form-group
                 input#platformid.form-control(type='hidden', name='platformid', value=platform._id )
 
-            button.btn.btn-primary(type='submit') Delete
+            button.btn.btn-primary(type='submit' class='btn btn-danger btn-lg') Delete #{platform.name} from Database

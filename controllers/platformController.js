@@ -92,7 +92,7 @@ exports.platform_create_post = [
 exports.platform_delete_get = asyncHandler(async (req, res, next) => {
   const [platform, gamesOnPlatform] = await Promise.all([
     Platform.findById(req.params.id).exec(),
-    VideoGame.find( { platform: req.params.id }, "name").exec(),
+    VideoGame.find({ platform: req.params.id }, "name developer publisher").sort({ name: 1}).populate('developer').populate('publisher').exec(),
   ]);
 
   if (platform === null) {
@@ -110,7 +110,7 @@ exports.platform_delete_get = asyncHandler(async (req, res, next) => {
 exports.platform_delete_post = asyncHandler(async (req, res, next) => {
   const [platform, gamesOnPlatform] = await Promise.all([
     Platform.findById(req.params.id).exec(),
-    VideoGame.find( { platform: req.params.id }, "name").exec(),
+    VideoGame.find({ platform: req.params.id }, "name developer publisher").sort({ name: 1}).populate('developer').populate('publisher').exec(),
   ]);
 
   if (gamesOnPlatform.length > 0) {
