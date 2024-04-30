@@ -2,23 +2,20 @@ extends layout
 
 block content
 
-  h1 Delete: #{rating.name}
-
-  if games_with_rating.length
-
-    h2 Delete the following items associated with #{rating.name} first.
-
-        h3 Games with a #{rating.acronym} for #{rating.name} age rating.
-        ul
-            each game in games_with_rating 
-                li
-                    a(href=game.url) #{game.name}
+  div(class='container')
+    h1(class='text-center') Delete #{rating.name} 
+        p &nbsp;
+    if games_with_rating.length
+        h2(class='text-center') Delete or Update these games first to remove them from the #{genre.name} genre
+        each game in games_with_rating 
+            ul(class="list-group")
+                a(href=game.url class='list-group-item list-group-item-action') #{game.name}
 
 
-  else
-    h5 Press button below to delete #{rating.name} rating.
-        form(method='POST')
+    else
+        form(method='POST' class='text-center')
+            h3 You cannot undo this!
             div.form-group
                 input#ratingid.form-control(type='hidden', name='ratingid', value=rating._id )
 
-            button.btn.btn-primary(type='submit') Delete
+            button.btn.btn-primary(type='submit' class='btn btn-danger btn-lg') Delete #{rating.name}

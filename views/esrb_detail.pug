@@ -1,21 +1,18 @@
 extends layout 
 
 block content 
-    h1= title 
-    h2= rating.desc
+    div(class='container')
+        h1(class='text-center')=title 
+        h2(class='text-center')=rating.desc
+        p &nbsp;
+        if games_by_age_rating.length 
+            h3 Games rated #{rating.acronym} for #{rating.name}.
+            each game in games_by_age_rating 
+                ul(class="list-group")
+                    a(href=game.url class='list-group-item list-group-item-action') #{game.name}
+        else
+            h3(class="text-center") No games in database rated #{rating.name}.
 
-    p Games that are rated #{rating.acronym} for #{rating.name}
-        if games_by_age_rating.length
-            ul 
-                each game in games_by_age_rating 
-                    li
-                        a(href=game.url) #{game.name}
-        else 
-            p No games in database rated #{rating.name}.
-
-    hr
-    p
-        a(href=rating.url+'/delete') Delete rating
-    hr
-    p
-        a(href=rating.url+'/update') Update rating
+        div(class="d-flex justify-content-around")
+            a(href=rating.url+'/update' class='btn btn-primary') Update rating 
+            a(href=rating.url+'/delete' class='btn btn-danger') Delete rating 
