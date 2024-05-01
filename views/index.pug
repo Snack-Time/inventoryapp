@@ -1,18 +1,19 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to the Blockstop Inventory Manager. Please look below for an overview of your database.
+  div(class='container')
+    h1= title
+    p Welcome to the Blockstop Inventory Manager. Please look below for an overview of your database.
 
-  h1 Database information 
+    h1 Database information 
 
-  p The database currently has the following record counts: 
+    p The database currently has the following record counts: 
 
-  ul 
-    li #[strong Video Games:] !{game_count}
-    li #[strong Game Copies:] !{game_instance_count}
-    li #[strong Available Game Copies:] !{game_instance_available_count}
-    li #[strong Companies:] !{company_count}
-    li #[strong Platforms:] !{platform_count}
-    li #[strong Genres:] !{genre_count}
-    li #[strong Age Ratings:] !{rating_count}
+    ul 
+      li #[strong Video Games:] !{game_count}
+      li #[strong Game Copies:] !{game_instance_count}
+      li #[strong Available Game Copies:] !{game_instance_available_count}
+      li #[strong Companies:] !{company_count}
+      li #[strong Platforms:] !{platform_count}
+      li #[strong Genres:] !{genre_count}
+      li #[strong Age Ratings:] !{rating_count}
