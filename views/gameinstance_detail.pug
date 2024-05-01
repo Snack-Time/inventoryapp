@@ -2,28 +2,20 @@ extends layout
 
 block content
 
-  h1 Store ID: #{gameinstance.storeid}
-  h1 Database ID: #{gameinstance._id}
-
-  p #[strong Name: ]
-    a(href=gameinstance.videogame.url) #{gameinstance.videogame.name}
-  p #[strong Platform: ]
-    a(href=gameinstance.platform.url) #{gameinstance.platform.name}
-
-  p #[strong Status: ]
-    if gameinstance.status=='Available'
-      span.text-success #{gameinstance.status}
-    else if gameinstance.status=='Maintenance'
-      span.text-danger #{gameinstance.status}
-    else
-      span.text-warning #{gameinstance.status}
-
-  if gameinstance.status!='Available'
-    p #[strong Due back:] #{gameinstance.due_back_formatted}
-
-  hr
-  p
-    a(href=gameinstance.url+'/delete') Delete game
-  hr
-  p
-    a(href=gameinstance.url+'/update') Update game
+  div(class='container')
+    p(class="h3") Store ID: #{gameinstance.storeid}
+    p(class="h3") Database ID: #{gameinstance._id}
+    div(class="list-group")
+      a(class='list-group-item list-group-item-action' href=gameinstance.videogame.url) #{gameinstance.videogame.name}
+      a(class='list-group-item list-group-item-action' href=gameinstance.platform.url) Platform: #{gameinstance.platform.name}
+      if gameinstance.status=='Available'
+        li(class='list-group-item list-group-item-success') #{gameinstance.status}
+      else if gameinstance.status=='Maintenance'
+        li(class='list-group-item list-group-item-danger') #{gameinstance.status}
+      else
+        li(class='list-group-item list-group-item-warning') #{gameinstance.status}
+        li(class='list-group-item list-group-item-warning') Due date: #{gameinstance.due_back_formatted}
+    p &nbsp;
+  div(class="d-flex justify-content-around")
+    a(href=gameinstance.url+'/update' class='btn btn-primary') Update copy 
+    a(href=gameinstance.url+'/delete' class='btn btn-danger') Delete copy 
