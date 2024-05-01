@@ -9,11 +9,11 @@ block content
 
     p The database currently has the following record counts: 
 
-    ul 
-      li #[strong Video Games:] !{game_count}
-      li #[strong Game Copies:] !{game_instance_count}
-      li #[strong Available Game Copies:] !{game_instance_available_count}
-      li #[strong Companies:] !{company_count}
-      li #[strong Platforms:] !{platform_count}
-      li #[strong Genres:] !{genre_count}
-      li #[strong Age Ratings:] !{rating_count}
+    div(class='list-group')
+      a(class='list-group-item list-group-item-action' href='/catalog/videogames') #[strong Video Games:] !{game_count}
+      a(class='list-group-item list-group-item-action' href='/catalog/gameinstances') #[strong Game Copies:] !{game_instance_count}
+      a(class='list-group-item list-group-item-action') #[strong Available Game Copies:] !{game_instance_available_count}
+      a(class='list-group-item list-group-item-action' href='/catalog/companies') #[strong Companies:] !{company_count}
+      a(class='list-group-item list-group-item-action' href='/catalog/platforms') #[strong Platforms:] !{platform_count}
+      a(class='list-group-item list-group-item-action' href='/catalog/genres') #[strong Genres:] !{genre_count}
+      a(class='list-group-item list-group-item-action' href='/catalog/ESRBRatings') #[strong Age Ratings:] !{rating_count}
